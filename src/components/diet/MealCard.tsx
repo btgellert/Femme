@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import { Card, Text, List } from 'react-native-paper';
 import { Meal } from '../../types/diet';
 
@@ -10,10 +10,17 @@ interface MealCardProps {
 export function MealCard({ meal, onPress }: MealCardProps) {
   return (
     <Card style={styles.card} onPress={onPress}>
-      <Card.Cover source={{ uri: meal.image_url }} />
+      <View style={styles.imageContainer}>
+        <Image 
+          source={{ uri: meal.image_url }} 
+          style={styles.image}
+          resizeMode="cover"
+        />
+      </View>
       <Card.Content style={styles.content}>
         <Text variant="titleLarge">{meal.name}</Text>
         <Text variant="bodyMedium" style={styles.description} numberOfLines={2}>
+
           {meal.description}
         </Text>
         
@@ -67,6 +74,9 @@ const styles = StyleSheet.create({
   card: {
     marginBottom: 16,
     elevation: 4,
+    borderRadius: 12,
+    backgroundColor: '#1A1A1A',
+    overflow: 'hidden',
   },
   content: {
     paddingVertical: 8,
@@ -89,5 +99,52 @@ const styles = StyleSheet.create({
   nutritionLabel: {
     opacity: 0.7,
     marginBottom: 4,
+  },
+  imageContainer: {
+    height: 200,
+    width: '100%',
+    backgroundColor: '#1A1A1A',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+}); 
+
+
+const stylesImage = StyleSheet.create({
+  card: {
+    marginBottom: 16,
+    elevation: 4,
+    borderRadius: 12,
+    backgroundColor: '#1A1A1A',
+    overflow: 'hidden',
+  },
+  imageContainer: {
+    height: 200,
+    width: '100%',
+    backgroundColor: '#1A1A1A',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  content: {
+    paddingVertical: 8,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  title: {
+    color: '#FFFFFF',
+    flex: 1,
+    marginRight: 8,
+  },
+  description: {
+    opacity: 0.7,
+    color: '#FFFFFF',
   },
 }); 

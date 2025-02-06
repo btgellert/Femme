@@ -2,7 +2,11 @@ import { Stack } from 'expo-router';
 
 export default function ModalsLayout() {
   return (
-    <Stack>
+    <Stack
+    screenOptions={{
+      headerStyle: { backgroundColor: 'black' }, // Black header background
+      headerTintColor: 'white', // White text
+    }}>
       <Stack.Screen
         name="diet-plan"
         options={{

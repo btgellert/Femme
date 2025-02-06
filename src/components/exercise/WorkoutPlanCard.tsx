@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
-import { Card, Text } from 'react-native-paper';
+import { Card, Chip, Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { WorkoutPlan } from '@/types/exercise';
 
@@ -33,15 +33,15 @@ export function WorkoutPlanCard({ plan }: WorkoutPlanCardProps) {
         </View>
       )}
       <Card.Content style={styles.content}>
-        <Text variant="titleLarge" style={styles.title}>{plan.title}</Text>
-        <Text variant="bodyMedium" style={styles.description}>
+      <View style={styles.header}>
+          <Text variant="titleLarge" style={styles.title}>{plan.title}</Text>
+          {plan.is_premium && (
+            <Chip icon="star" mode="outlined">Premium</Chip>
+          )}
+        </View>
+        <Text variant="bodyMedium" numberOfLines={2} style={styles.description}>
           {plan.description}
         </Text>
-        {plan.is_premium && (
-          <Text variant="labelSmall" style={styles.premiumBadge}>
-            Premium
-          </Text>
-        )}
       </Card.Content>
     </Card>
   );
@@ -80,5 +80,11 @@ const styles = StyleSheet.create({
     marginTop: 8,
     color: '#32CD32',
     fontWeight: 'bold',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
   },
 }); 

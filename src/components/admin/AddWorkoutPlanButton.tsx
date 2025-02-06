@@ -170,11 +170,12 @@ const styles = StyleSheet.create({
     margin: 16,
   },
   modal: {
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     padding: 20,
     margin: 20,
     borderRadius: 8,
   },
+
   title: {
     marginBottom: 20,
     textAlign: 'center',

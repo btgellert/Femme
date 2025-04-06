@@ -1,11 +1,15 @@
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, Button, Avatar, List } from 'react-native-paper';
+import { Text, Button, Avatar, List, Divider } from 'react-native-paper';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'expo-router';
+import { AddTrainingPlanButton } from '@/components/admin/AddTrainingPlanButton';
 
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
   const router = useRouter();
+
+  const isAdmin = user?.user_metadata?.role === 'admin';
 
   if (!user) {
     return (
@@ -37,7 +41,7 @@ export default function ProfileScreen() {
   }
 
   // Get subscription status from user metadata
-  const isPremium = user.user_metadata?.is_subscribed || false;
+  const isPremium = user.user_metadata?.is_premium || false;
 
   return (
     <View style={styles.container}>
@@ -50,6 +54,11 @@ export default function ProfileScreen() {
         <Text variant="headlineSmall" style={styles.name}>
           {user.email}
         </Text>
+        {isAdmin && (
+          <View style={styles.adminBadge}>
+            <Text style={styles.adminBadgeText}>Admin</Text>
+          </View>
+        )}
       </View>
 
       <List.Section>
@@ -57,23 +66,39 @@ export default function ProfileScreen() {
           title="Subscription"
           description={isPremium ? 'Premium' : 'Free'}
           left={props => <List.Icon {...props} icon="star" color="#32CD32" />}
-          onPress={() => router.push('/(modals)/subscription')}
           titleStyle={styles.listTitle}
           descriptionStyle={styles.listDescription}
         />
         <List.Item
           title="Settings"
           left={props => <List.Icon {...props} icon="cog" color="#32CD32" />}
-          onPress={() => router.push('/(modals)/settings')}
           titleStyle={styles.listTitle}
         />
         <List.Item
           title="Help & Support"
           left={props => <List.Icon {...props} icon="help-circle" color="#32CD32" />}
-          onPress={() => router.push('/(modals)/support')}
           titleStyle={styles.listTitle}
         />
       </List.Section>
+
+      {isAdmin && (
+        <>
+          <Divider style={styles.divider} />
+          
+          <List.Section>
+            <List.Subheader style={styles.sectionTitle}>Admin Tools</List.Subheader>
+            
+            <List.Item
+              title="Manage Users"
+              left={props => <List.Icon {...props} icon="account-group" color="#FFD700" />}
+              onPress={() => router.push('/admin-users')}
+              titleStyle={styles.listTitle}
+            />
+            
+            <AddTrainingPlanButton />
+          </List.Section>
+        </>
+      )}
 
       <Button 
         mode="outlined" 
@@ -90,55 +115,76 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: '#000000',
-  },
-  header: {
-    alignItems: 'center',
-    marginVertical: 24,
-  },
-  avatar: {
-    backgroundColor: '#1A1A1A',
-  },
-  name: {
-    marginTop: 8,
-    color: '#FFFFFF',
-  },
-  logoutButton: {
-    marginTop: 'auto',
-    borderColor: '#32CD32',
+    padding: 16,
   },
   loginPrompt: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 32,
+    padding: 20,
   },
   title: {
-    textAlign: 'center',
-    marginBottom: 8,
     color: '#FFFFFF',
+    marginBottom: 16,
+    textAlign: 'center',
   },
   subtitle: {
-    textAlign: 'center',
-    marginBottom: 32,
-    opacity: 0.7,
     color: '#FFFFFF',
+    opacity: 0.7,
+    textAlign: 'center',
+    marginBottom: 24,
   },
   loginButton: {
     width: '100%',
     marginBottom: 12,
-    backgroundColor: '#32CD32',
   },
   registerButton: {
     width: '100%',
     borderColor: '#32CD32',
   },
+  header: {
+    alignItems: 'center',
+    marginBottom: 24,
+    position: 'relative',
+  },
+  avatar: {
+    marginBottom: 16,
+    backgroundColor: '#32CD32',
+  },
+  name: {
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  adminBadge: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    backgroundColor: '#FFD700',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 16,
+  },
+  adminBadgeText: {
+    color: '#000000',
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
   listTitle: {
     color: '#FFFFFF',
   },
   listDescription: {
-    color: '#FFFFFF',
-    opacity: 0.7,
+    color: '#32CD32',
+  },
+  divider: {
+    backgroundColor: '#2A2A2A',
+    marginVertical: 16,
+  },
+  sectionTitle: {
+    color: '#FFD700',
+  },
+  logoutButton: {
+    marginTop: 24,
+    borderColor: '#32CD32',
   },
 }); 
